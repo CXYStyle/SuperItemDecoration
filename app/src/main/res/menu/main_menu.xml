@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <item android:id="@+id/state"
+      android:title="当前状态："
+      app:showAsAction="never">
+  </item>
+
+  <item android:id="@+id/type"
+      android:title="DIVIDE模式"
+      app:showAsAction="never">
+
+    <menu>
+      <item android:id="@+id/divide"
+          android:title="DIVIDE模式"/>
+      <item android:id="@+id/section"
+          android:title="SECTION模式"/>
+    </menu>
+
+  </item>
+
+  <item
+      android:id="@+id/layout"
+      android:title="LinearLayout布局"
+      app:showAsAction="never">
+
+    <menu>
+      <item android:id="@+id/linear"
+          android:title="LinearLayout布局"/>
+      <item android:id="@+id/grid"
+          android:title="GridLayout布局"/>
+    </menu>
+
+  </item>
+
+  <item android:id="@+id/orientation"
+      android:title="VERTICAL方向"
+      app:showAsAction="never">
+
+    <menu>
+      <item android:id="@+id/vertical"
+          android:title="VERTICAL方向"/>
+      <item android:id="@+id/horizontal"
+          android:title="HORIZONTAL方向"/>
+    </menu>
+  </item>
+
+  <item
+      android:id="@+id/reverse"
+      android:title="正序"
+      app:showAsAction="never">
+
+    <menu>
+      <item android:id="@+id/zheng"
+          android:title="LinearLayout布局"/>
+      <item android:id="@+id/fan"
+          android:title="GridLayout布局"/>
+    </menu>
+
+  </item>
+
+
+
+</menu>
