@@ -12,6 +12,8 @@ LinearItemDecoration.Builder builder = new LinearItemDecoration.Builder(this)
     .setDivideColor(Color.GREEN)
     //分割线左右(上下)间距
     .setDividePadding(16)
+    
+    
     //以下为section设置，不需要可以不设置
     //是否显示section，默认false
     .setShowSection(true)
