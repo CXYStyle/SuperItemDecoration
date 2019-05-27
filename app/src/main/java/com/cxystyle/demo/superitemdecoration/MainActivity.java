@@ -47,27 +47,42 @@ public class MainActivity extends AppCompatActivity {
 
     mRv = findViewById(R.id.rv);
 
+    //括号内为Horizontal的情况
     builder = new LinearItemDecoration.Builder(this)
+        //分割线高度(宽度)
         .setDivideHeight(8)
+        //分割线颜色
         .setDivideColor(Color.GREEN)
+        //分割线左右(上下)间距
         .setDividePadding(16)
+
+        //以下为section设置，不需要可以不设置
+        //是否显示section，默认false
+        .setShowSection(false)
+        //section颜色
         .setSectionColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary))
-        .setSectionPadding(0)
+        //section高度(宽度)
         .setSectionHeight(32)
+        //section左右(上下)间距
+        .setSectionPadding(0)
+        //section文字颜色
         .setSectionTextColor(Color.WHITE)
+        //section文字离左(上)间距， 如果值小于0，则为居中
         .setSectionTextPadding(-1)
+        //section 文字size
         .setSectionTextSize(16)
+        //section是否吸顶
         .setStick(true)
+        //section 文字回调，用于section分类
         .setCallback(new LinearItemDecoration.SectionCallback() {
           @Override public String getSectionTitle(int pos) {
             return list.get(pos).substring(0, 1);
           }
         });
-    decorationDivider =
-        new LinearItemDecoration(builder);
 
-    decorationSection =
-        new LinearItemDecoration(true, builder);
+    decorationDivider = builder.build();
+
+    decorationSection = builder.setShowSection(true).build();
 
     linearLayoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
     gridLayoutManager = new GridLayoutManager(this, 5, RecyclerView.VERTICAL, false);

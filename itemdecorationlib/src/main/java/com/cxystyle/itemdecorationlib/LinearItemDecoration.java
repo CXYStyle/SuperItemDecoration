@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import androidx.annotation.NonNull;
@@ -52,19 +53,12 @@ public class LinearItemDecoration extends RecyclerView.ItemDecoration {
 
   private boolean showSection;
 
-  private boolean isTextCenter = false;
+  private boolean isTextCenter;
 
-  public LinearItemDecoration(Builder builder) {
-    this(false, builder);
-  }
-
-  /**
-   * @param showSection 是否显示section
-   */
-  public LinearItemDecoration(boolean showSection, Builder builder) {
+  private LinearItemDecoration(Builder builder) {
     super();
 
-    this.showSection = showSection;
+    this.showSection = builder.showSection;
 
     this.context = builder.context;
 
@@ -91,9 +85,6 @@ public class LinearItemDecoration extends RecyclerView.ItemDecoration {
    * 初始化
    */
   private void init() {
-    if (callback == null) {
-      showSection = false;
-    }
 
     sectionHeight = dp2px(context, sectionHeight);
     sectionPadding = dp2px(context, sectionPadding);
@@ -170,7 +161,7 @@ public class LinearItemDecoration extends RecyclerView.ItemDecoration {
             }
           }
           c.drawRect(left, top, right, bottom, sectionPaint);
-          c.drawText(callback.getSectionTitle(position), getTextX(left, right),
+          c.drawText(getText(position), getTextX(left, right),
               getTextY(top, bottom), textPaint);
         }
 
@@ -265,7 +256,7 @@ public class LinearItemDecoration extends RecyclerView.ItemDecoration {
       }
 
       c.drawRect(left, top, right, bottom, sectionPaint);
-      c.drawText(callback.getSectionTitle(pos), getTextX(left, right), getTextY(top, bottom),
+      c.drawText(getText(pos), getTextX(left, right), getTextY(top, bottom),
           textPaint);
 
     }
@@ -317,6 +308,19 @@ public class LinearItemDecoration extends RecyclerView.ItemDecoration {
     }
   }
 
+
+  private String getText(int pos){
+    if (callback != null){
+      String sectionTitle = callback.getSectionTitle(pos);
+      if (sectionTitle != null && !TextUtils.isEmpty(sectionTitle)){
+        return sectionTitle;
+      }else{
+        return "";
+      }
+    }
+    return "";
+  }
+
   private int getTextX(int left, int right) {
 
     if (orientation == RecyclerView.HORIZONTAL || isTextCenter) {
@@ -340,9 +344,7 @@ public class LinearItemDecoration extends RecyclerView.ItemDecoration {
     if (position == 0) {
       return true;
     } else {
-      String prevTitle = callback.getSectionTitle(position - 1);
-      String title = callback.getSectionTitle(position);
-      if (prevTitle.equals(title)) {
+      if (getText(position - 1).equals(getText(position))) {
         return false;
       } else {
         return true;
@@ -387,8 +389,15 @@ public class LinearItemDecoration extends RecyclerView.ItemDecoration {
 
     private SectionCallback callback;
 
+    private boolean showSection;
+
     public Builder(Context context) {
       this.context = context;
+    }
+
+    public Builder setShowSection(boolean showSection) {
+      this.showSection = showSection;
+      return this;
     }
 
     /**
@@ -478,6 +487,13 @@ public class LinearItemDecoration extends RecyclerView.ItemDecoration {
       this.callback = callback;
       return this;
     }
+
+    public LinearItemDecoration build(){
+      return new LinearItemDecoration(this);
+    }
+
+
+
   }
 
   /**
