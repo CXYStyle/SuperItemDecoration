@@ -3,6 +3,22 @@
 
 ![demo1](https://github.com/cxystyle/SuperItemDecoration/blob/master/images/demo1.gif)
 
+## 引用方法
+```gradle
+项目的build.gradle文件中：
+allprojects {
+    repositories {
+        ...
+        maven { url 'https://jitpack.io' }
+    }
+}
+
+
+module的build.gradle文件中：
+dependencies {
+    implementation 'com.github.cxystyle:SuperItemDecoration:1.0.0'
+}
+```
 
 ## LinearLayoutManager
 以下为食用方法:
