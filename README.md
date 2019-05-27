@@ -41,3 +41,7 @@ LinearItemDecoration.Builder builder = new LinearItemDecoration.Builder(this)
 //添加ItemDecoration
 mRv.addItemDecoration(builder.build());
 ```
+
+## GridLayoutManager
+后续添加啦
+
