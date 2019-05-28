@@ -31,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
 
   private GridLayoutManager gridLayoutManager;
 
-
   private ArrayList<String> list;
   private MenuItem menuType;
   private MenuItem menuLayout;
@@ -111,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
   @Override public boolean onCreateOptionsMenu(Menu menu) {
     getMenuInflater().inflate(R.menu.main_menu, menu);
     menuType = menu.findItem(R.id.type);
-    menuLayout = menu.findItem(R.id.layout);
+    //menuLayout = menu.findItem(R.id.layout);
     menuOri = menu.findItem(R.id.orientation);
     menuReverse = menu.findItem(R.id.reverse);
     return true;
@@ -127,14 +126,14 @@ public class MainActivity extends AppCompatActivity {
         switchType(true);
         menuType.setTitle("SECTION模式");
         break;
-      case R.id.linear:
-        switchLayout(LAYOUT_LINEAR);
-        menuLayout.setTitle("LinearLayout布局");
-        break;
-      case R.id.grid:
-        switchLayout(LAYOUT_GRID);
-        menuLayout.setTitle("LinearLayout布局");
-        break;
+      //case R.id.linear:
+      //  switchLayout(LAYOUT_LINEAR);
+      //  menuLayout.setTitle("LinearLayout布局");
+      //  break;
+      //case R.id.grid:
+      //  switchLayout(LAYOUT_GRID);
+      //  menuLayout.setTitle("GridLayout布局");
+      //  break;
       case R.id.vertical:
         switchOri(RecyclerView.VERTICAL);
         menuOri.setTitle("VERTICAL方向");

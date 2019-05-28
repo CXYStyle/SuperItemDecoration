@@ -20,19 +20,19 @@
 
   </item>
 
-  <item
-      android:id="@+id/layout"
-      android:title="LinearLayout布局"
-      app:showAsAction="never">
+  <!--<item-->
+      <!--android:id="@+id/layout"-->
+      <!--android:title="LinearLayout布局"-->
+      <!--app:showAsAction="never">-->
 
-    <menu>
-      <item android:id="@+id/linear"
-          android:title="LinearLayout布局"/>
-      <item android:id="@+id/grid"
-          android:title="GridLayout布局"/>
-    </menu>
+    <!--<menu>-->
+      <!--<item android:id="@+id/linear"-->
+          <!--android:title="LinearLayout布局"/>-->
+      <!--<item android:id="@+id/grid"-->
+          <!--android:title="GridLayout布局"/>-->
+    <!--</menu>-->
 
-  </item>
+  <!--</item>-->
 
   <item android:id="@+id/orientation"
       android:title="VERTICAL方向"
