@@ -6,17 +6,165 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
+    android:padding="16dp"
     >
 
-  <androidx.recyclerview.widget.RecyclerView
-      android:id="@+id/rv"
-      android:layout_width="0dp"
-      android:layout_height="0dp"
-      app:layout_constraintLeft_toLeftOf="parent"
+  
+  <TextView
+      android:id="@+id/tv1"
       app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintLeft_toLeftOf="parent"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="LayoutManager"
+      android:layout_marginTop="16dp"
+      />
+  
+  <RadioGroup
+      android:id="@+id/rg1"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/tv1"
       app:layout_constraintRight_toRightOf="parent"
-      app:layout_constraintBottom_toBottomOf="parent"
-      ></androidx.recyclerview.widget.RecyclerView>
+      android:orientation="horizontal"
+      >
+    <RadioButton
+        android:id="@+id/linear"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Linear"
+        android:checked="true"
+        />
+    <RadioButton
+        android:id="@+id/grid"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Grid"
+        />
+    
+  </RadioGroup>
+  
+  
+  <TextView
+      android:id="@+id/tv2"
+      app:layout_constraintTop_toBottomOf="@+id/rg1"
+      app:layout_constraintLeft_toLeftOf="parent"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="Mode"
+      android:layout_marginTop="16dp"
+      />
+  
+  <RadioGroup
+      android:id="@+id/rg2"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      app:layout_constraintTop_toBottomOf="@+id/tv2"
+      android:orientation="horizontal"
+      >
+    
+    <RadioButton
+        android:id="@+id/divide"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Divide"
+        android:checked="true"
+        />
+    <RadioButton
+        android:id="@+id/section"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="With Section"
+        />
+  </RadioGroup>
+  
+  <TextView
+      android:id="@+id/tv3"
+      app:layout_constraintTop_toBottomOf="@+id/rg2"
+      app:layout_constraintLeft_toLeftOf="parent"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="Orientation"
+      android:layout_marginTop="16dp"
+      />
+  
+  <RadioGroup
+      android:id="@+id/rg3"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      app:layout_constraintTop_toBottomOf="@+id/tv3"
+      android:orientation="horizontal"
+      >
+    
+    <RadioButton
+        android:id="@+id/vertical"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Vertical"
+        android:checked="true"
+        />
+    <RadioButton
+        android:id="@+id/horizontal"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Horizontal"
+        />
+  </RadioGroup>
+  
+  
+  <TextView
+      android:id="@+id/tv4"
+      app:layout_constraintTop_toBottomOf="@+id/rg3"
+      app:layout_constraintLeft_toLeftOf="parent"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="Reverse"
+      android:layout_marginTop="16dp"
+      />
+  
+  <RadioGroup
+      android:id="@+id/rg4"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      app:layout_constraintTop_toBottomOf="@+id/tv4"
+      android:orientation="horizontal"
+      >
+    
+    <RadioButton
+        android:id="@+id/istrue"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="true"
+        />
+    <RadioButton
+        android:id="@+id/isfalse"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="false"
+        android:checked="true"
+        />
+  </RadioGroup>
+  
+  <androidx.appcompat.widget.AppCompatButton
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="start"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintRight_toRightOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/rg4"
+      android:layout_marginTop="16dp"
+      android:textAllCaps="false"
+      android:onClick="action"
+      />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

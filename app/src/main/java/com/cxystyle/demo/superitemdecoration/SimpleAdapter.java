@@ -13,9 +13,9 @@ public class SimpleAdapter extends RecyclerView.Adapter<SimpleAdapter.SimpleView
 
   private int layoutId;
 
-  private List<String> datas;
+  private List<Integer> datas;
 
-  public SimpleAdapter(@LayoutRes int layoutId, List<String> datas) {
+  public SimpleAdapter(@LayoutRes int layoutId, List<Integer> datas) {
     this.layoutId = layoutId;
     this.datas = datas;
   }
@@ -30,7 +30,7 @@ public class SimpleAdapter extends RecyclerView.Adapter<SimpleAdapter.SimpleView
   }
 
   @Override public void onBindViewHolder(@NonNull SimpleViewHolder holder, int position) {
-    holder.tv.setText(datas.get(position));
+    holder.tv.setText(String.valueOf(datas.get(position)));
   }
 
   public class SimpleViewHolder extends RecyclerView.ViewHolder{
