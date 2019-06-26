@@ -44,17 +44,12 @@ public class DemoActivity extends BaseActivity {
   private void initRecycleView() {
     mRv = findViewById(R.id.rv);
 
-    mRv.setLayoutManager(mLayoutManager == 1 ? new LinearLayoutManager(this, mOrientation, mReverse) : new GridLayoutManager(this, 4, mOrientation, mReverse));
-
     //括号内为Horizontal的情况
     mBuilder = mLayoutManager == 1 ? new LinearBuilder() : new GridBuilder();
     mBuilder
-        //分割线高度(宽度)
-        .setDivideWH(16)
         //分割线颜色
         .setDivideColor(Color.GRAY)
-        //分割线左右(上下)间距
-        .setDividePadding(32)
+
 
         //以下为section设置，不需要可以不设置
         //是否显示section，默认false
@@ -63,7 +58,7 @@ public class DemoActivity extends BaseActivity {
         .setSectionColor(Color.GRAY)
         //.setSectionColor(Color.TRANSPARENT)
         //section高度(宽度)
-        .setSectionWH(48)
+        .setSectionWH(56)
         //section左右(上下)间距
         .setSectionPadding(0)
         //section文字颜色
@@ -97,7 +92,23 @@ public class DemoActivity extends BaseActivity {
             Toast.makeText(DemoActivity.this, String.valueOf(position), Toast.LENGTH_SHORT).show();
           }
         });
+    if (mLayoutManager == 1){
+      ((LinearBuilder) mBuilder)
+          //分割线高度(宽度)
+          .setDivideWidth(16)
+          //分割线左右(上下)间距
+          .setDividePadding(32);
+    }else{
+      ((GridBuilder) mBuilder)
+          .setHorDivideWidth(20)
+          .setHorDividePadding(0)
+          .setVerDivideWidth(13)
+          .setVerDividePadding(0);
+    }
+
+
     int layoutId = mLayoutManager == 1 ? R.layout.item : mOrientation == RecyclerView.VERTICAL ? R.layout.item_grid_ver : R.layout.item_grid_hor;
+    mRv.setLayoutManager(mLayoutManager == 1 ? new LinearLayoutManager(this, mOrientation, mReverse) : new GridLayoutManager(this, 5, mOrientation, mReverse));
 
     mAdapter = new SimpleAdapter(layoutId, Datas.list);
     mRv.addItemDecoration(mBuilder.build());

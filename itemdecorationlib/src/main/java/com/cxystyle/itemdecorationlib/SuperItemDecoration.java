@@ -32,8 +32,6 @@ public class SuperItemDecoration extends RecyclerView.ItemDecoration {
   protected int mSectionTextColor;
   protected boolean mIsStick;
 
-  protected int mDivideWH;
-  protected int mDividePadding;
   protected int mDivideColor;
 
   protected Paint mSectionPaint;
@@ -69,10 +67,7 @@ public class SuperItemDecoration extends RecyclerView.ItemDecoration {
     this.mSectionTextColor = builder.getSectionTextColor();
     this.mIsStick = builder.isStick();
 
-    this.mDivideWH = builder.getDivideWH();
-    this.mDividePadding = builder.getDividePadding();
     this.mDivideColor = builder.getDivideColor();
-
 
     mSectionPaint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG);
     mSectionPaint.setColor(mSectionColor);

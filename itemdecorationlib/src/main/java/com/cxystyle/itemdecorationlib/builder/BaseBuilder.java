@@ -5,7 +5,9 @@ import com.cxystyle.itemdecorationlib.GridItemDecoration;
 import com.cxystyle.itemdecorationlib.SuperItemDecoration;
 import com.cxystyle.itemdecorationlib.callback.OnSectionClickListener;
 import com.cxystyle.itemdecorationlib.callback.SectionTitleCallback;
-
+import java.lang.reflect.GenericArrayType;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 
 public abstract class BaseBuilder<T extends BaseBuilder> {
 
@@ -16,11 +18,9 @@ public abstract class BaseBuilder<T extends BaseBuilder> {
   private static final int DEFAULT_SECTION_TEXT_SIZE = 14;
   private static final int DEFAULT_SECTION_TEXT_COLOR = Color.parseColor("#999999");
   private static final boolean DEFAULT_IS_STICK = false;
-  private static final int DEFAULT_DIVIDE_WIDTH_HEIGHT = 10;
-  private static final int DEFAULT_DIVIDE_PADDING = 16;
-  private static final int DEFAULT_DIVIDE_COLOR = Color.parseColor("#c6c6c6");
-  private static final boolean DEFAULT_SHOW_SECTION = false;
 
+
+  private static final boolean DEFAULT_SHOW_SECTION = false;
 
   //section
   //宽或高
@@ -40,14 +40,10 @@ public abstract class BaseBuilder<T extends BaseBuilder> {
   //是否显示分类title
   protected boolean showSection = DEFAULT_SHOW_SECTION;
 
-
-  //divide
-  //宽或高
-  protected int divideWH = DEFAULT_DIVIDE_WIDTH_HEIGHT;
-  //两边边距
-  protected int dividePadding = DEFAULT_DIVIDE_PADDING;
   //颜色
-  protected int divideColor = DEFAULT_DIVIDE_COLOR;
+  protected int divideColor = getDefaultDivideColor();
+
+  protected abstract int getDefaultDivideColor();
 
   //section 分类title数据回调
   protected SectionTitleCallback callback;
@@ -120,29 +116,11 @@ public abstract class BaseBuilder<T extends BaseBuilder> {
     return (T) this;
   }
 
-  public int getDivideWH() {
-    return divideWH;
-  }
-
-  public T setDivideWH(int divideWH) {
-    this.divideWH = divideWH;
-    return (T) this;
-  }
-
-  public int getDividePadding() {
-    return dividePadding;
-  }
-
-  public T setDividePadding(int dividePadding) {
-    this.dividePadding = dividePadding;
-    return (T) this;
-  }
-
   public int getDivideColor() {
     return divideColor;
   }
 
-  public T setDivideColor(int divideColor) {
+  public BaseBuilder setDivideColor(int divideColor) {
     this.divideColor = divideColor;
     return (T) this;
   }
@@ -177,6 +155,5 @@ public abstract class BaseBuilder<T extends BaseBuilder> {
 
 
   public abstract SuperItemDecoration build();
-
 
 }

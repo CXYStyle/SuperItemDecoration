@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.cxystyle.itemdecorationlib.builder.BaseBuilder;
+import com.cxystyle.itemdecorationlib.builder.LinearBuilder;
 
 /**
  * RecyclerView 的LinearLayoutManager 万能分割线。 可以设置Section(分类title)和分割线。
@@ -23,8 +24,18 @@ public class LinearItemDecoration extends SuperItemDecoration {
   //文字的高度
   private float textHeight;
 
+  //分割线宽
+  protected int mDivideWidth;
+  //分割线距离recyclerview 间距
+  protected int mDividePadding;
+
   public LinearItemDecoration(BaseBuilder builder) {
     super(builder);
+
+    LinearBuilder linearBuilder = (LinearBuilder) builder;
+
+    this.mDivideWidth = linearBuilder.getDivideWidth();
+    this.mDividePadding = linearBuilder.getDividePadding();
 
     Paint.FontMetrics fontMetrics = mTextPaint.getFontMetrics();
     textDistance = (fontMetrics.bottom - fontMetrics.top) / 2 - fontMetrics.bottom;
@@ -82,27 +93,27 @@ public class LinearItemDecoration extends SuperItemDecoration {
         }
 
         //divide
-        if (mDivideWH != 0) {
+        if (mDivideWidth != 0) {
           int top, bottom, left, right;
           if (mOrientation == LinearLayoutManager.VERTICAL) {
             left = mDividePadding;
             right = mWidth - mDividePadding;
             if (reverseLayout) {
               bottom = child.getTop();
-              top = bottom - mDivideWH;
+              top = bottom - mDivideWidth;
             } else {
               top = child.getBottom();
-              bottom = top + mDivideWH;
+              bottom = top + mDivideWidth;
             }
           } else {
             top = mDividePadding;
             bottom = mHeight - mDividePadding;
             if (reverseLayout) {
               right = child.getLeft();
-              left = right - mDivideWH;
+              left = right - mDivideWidth;
             } else {
               left = child.getRight();
-              right = left + mDivideWH;
+              right = left + mDivideWidth;
             }
           }
           c.drawRect(left, top, right, bottom, mDividePaint);
@@ -196,7 +207,8 @@ public class LinearItemDecoration extends SuperItemDecoration {
 
     if (mShowSection) {
 
-      int offset = pos == 0 ? mSectionWH : isShowSection(pos) ? mSectionWH + mDivideWH : mDivideWH;
+      int offset = pos == 0 ? mSectionWH : isShowSection(pos) ? mSectionWH + mDivideWidth
+          : mDivideWidth;
 
       if (mOrientation == LinearLayoutManager.VERTICAL) {
         if (mIsReverse) {
@@ -214,15 +226,15 @@ public class LinearItemDecoration extends SuperItemDecoration {
     } else {
       if (mOrientation == LinearLayoutManager.VERTICAL) {
         if (mIsReverse) {
-          outRect.top = mDivideWH;
+          outRect.top = mDivideWidth;
         } else {
-          outRect.bottom = mDivideWH;
+          outRect.bottom = mDivideWidth;
         }
       } else {
         if (mIsReverse) {
-          outRect.left = mDivideWH;
+          outRect.left = mDivideWidth;
         } else {
-          outRect.right = mDivideWH;
+          outRect.right = mDivideWidth;
         }
       }
     }
