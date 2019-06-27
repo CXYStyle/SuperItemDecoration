@@ -2,6 +2,7 @@ package com.cxystyle.itemdecorationlib;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.util.ArrayMap;
 import android.util.Log;
@@ -29,17 +30,14 @@ public class GridItemDecoration extends SuperItemDecoration {
 
   private GridLayoutManager.SpanSizeLookup mSectionSpan;
 
-  private int mAllCount;
   private int mSpanCount;
 
   private ArrayMap<Integer, Integer> offsets = new ArrayMap<>();
-  private ArrayList sectionPositions = new ArrayList();
   private GridLayoutManager.SpanSizeLookup mDefaultSpanSizeLookup;
 
 
   private boolean mNeedAdd;
   private int mNeedAddRowPosition;
-  private boolean isInit;
 
   public GridItemDecoration(BaseBuilder builder) {
     super(builder);
@@ -49,13 +47,13 @@ public class GridItemDecoration extends SuperItemDecoration {
     mSectionSpan = new GridLayoutManager.SpanSizeLookup() {
       @Override public int getSpanSize(int p) {
 
-        if (p >= 0 && p < mAllCount - 1 && isShowSection(p + 1)) {
+        if (p >= 0 && p < mAllItemCount - 1 && isShowSection(p + 1)) {
           int spanIndex = p % mSpanCount;
 
           int offset = getOffset(p);
 
           int newIndex = (offset + spanIndex) % mSpanCount;
-          //Log.d("123", "getSpanSize: " + p + "," + offset + "," + spanIndex + "," + newIndex);
+          Log.d("123", "getSpanSize: " + p + "," + offset + "," + spanIndex + "," + newIndex);
 
           int newSize = mSpanCount - newIndex;
 
@@ -77,8 +75,6 @@ public class GridItemDecoration extends SuperItemDecoration {
     GridBuilder gridBuilder = (GridBuilder) builder;
     mHorDivideWidth = gridBuilder.getHorDivideWidth();
     mVerDivideWidth = gridBuilder.getVerDivideWidth();
-    mHorDividePadding = gridBuilder.getHorDividePadding();
-    mVerDividePadding = gridBuilder.getVerDividePadding();
   }
 
   @Override
@@ -86,55 +82,92 @@ public class GridItemDecoration extends SuperItemDecoration {
       @NonNull RecyclerView.State state) {
     super.onDraw(c, parent, state);
 
-    //int allCount = parent.getAdapter().getItemCount();
-    //
-    //int childCount = parent.getChildCount();
-    //
-    //int left, top, right, bottom;
-    //
-    //for (int i = 0; i < childCount; i++) {
-    //  View child = parent.getChildAt(i);
-    //  int pos = parent.getChildAdapterPosition(child);
-    //
-    //  //section
-    //  if (mShowSection && isSectionRow(pos)) {
-    //    top = child.getTop() - mSectionWH;
-    //    bottom = top + mSectionWH;
-    //    left = 0;
-    //    right = mWidth;
-    //    c.drawRect(left, top, right, bottom, mSectionPaint);
-    //  }
-    //
-    //
-    //
-    //  //divide
-    //  //竖 画右边
-    //
-    //  int rowPosition = getSpanSizeLookup().getSpanIndex(pos, mSpanCount);
-    //  left = child.getRight();
-    //  right = left + mVerDivideWidth;
-    //  top = child.getTop();
-    //  bottom = child.getBottom() + mHorDivideWidth;
-    //
-    //  if (rowPosition  == mSpanCount - 1){
-    //
-    //  }else{
-    //    if (mNeedAdd && rowPosition == mNeedAddRowPosition){
-    //      right += 1;
-    //    }
-    //    c.drawRect(left, top, right, bottom, mDividePaint);
-    //  }
-    //
-    //
-    //
-    //  //横 画下
-    //  top = child.getBottom();
-    //  bottom = top + mHorDivideWidth;
-    //  left = child.getLeft();
-    //  right = child.getRight();
-    //  c.drawRect(left, top, right, bottom, mDividePaint);
-    //
-    //}
+    int childCount = parent.getChildCount();
+
+    int left, top, right, bottom;
+
+    for (int i = 0; i < childCount; i++) {
+      View child = parent.getChildAt(i);
+      int pos = parent.getChildAdapterPosition(child);
+
+      //section
+      if (mShowSection && isSectionRow(pos)) {
+        if (isVertical()) {
+          left = mSectionPadding;
+          right = mWidth - mSectionPadding;
+          if (mIsReverse){
+            top = child.getBottom();
+            bottom = top + mSectionWH;
+          }else {
+            bottom = child.getTop();
+            top = bottom - mSectionWH;
+          }
+        }else{
+          top = mSectionPadding;
+          bottom = mHeight - mSectionPadding;
+          if (mIsReverse){
+            left = child.getRight();
+            right = left + mSectionWH;
+          }else{
+            right = child.getLeft();
+            left = right - mSectionWH;
+          }
+        }
+        c.drawRect(left, top, right, bottom, mSectionPaint);
+        c.drawText(getText(pos), getTextX(left, right),
+            getTextY(top, bottom), mTextPaint);
+
+        mSectionTops.put(pos, new Point(left, top));
+      }
+
+
+      //divide
+      //竖
+      int rowPosition = getSpanSizeLookup().getSpanIndex(pos, mSpanCount);
+
+      if (mIsReverse && isHorizontal()){
+        right = child.getLeft();
+        left = right - mVerDivideWidth;
+      }else {
+        left = child.getRight();
+        right = left + mVerDivideWidth;
+      }
+
+      top = child.getTop();
+      bottom = child.getBottom() + (isHorizontal() && rowPosition != mSpanCount - 1 ? mHorDivideWidth : 0);
+
+      if (rowPosition  == mSpanCount - 1 && isVertical()){
+
+      }else{
+        if (mNeedAdd && rowPosition == mNeedAddRowPosition && isVertical()){
+          right += 1;
+        }
+        c.drawRect(left, top, right, bottom, mDividePaint);
+      }
+
+
+      //横
+      if (isVertical() && mIsReverse){
+        bottom = child.getTop();
+        top = bottom - mHorDivideWidth;
+      }else {
+        top = child.getBottom();
+        bottom = top + mHorDivideWidth;
+      }
+
+      right = child.getRight() + (isVertical() && rowPosition != mSpanCount - 1 ? mVerDivideWidth : 0);
+      left = child.getLeft();
+
+      if (rowPosition  == mSpanCount - 1 && isHorizontal()){
+
+      }else{
+        if (mNeedAdd && rowPosition == mNeedAddRowPosition && isHorizontal()){
+          bottom += 1;
+        }
+        c.drawRect(left, top, right, bottom, mDividePaint);
+      }
+
+    }
 
   }
 
@@ -143,7 +176,68 @@ public class GridItemDecoration extends SuperItemDecoration {
       @NonNull RecyclerView.State state) {
     super.onDrawOver(c, parent, state);
 
+    if (mShowSection && mIsStick) {
 
+      View child = parent.getChildAt(0);
+      int pos = parent.getChildAdapterPosition(child);
+
+      int left, top, right, bottom, distance;
+
+      if (isVertical()) {
+        left = mSectionPadding;
+        right = mWidth - mSectionPadding;
+
+        if (mIsReverse) {
+          distance = mHeight - child.getTop();
+          top = mHeight - mSectionWH;
+          bottom = mHeight;
+
+          if (distance <= mSectionWH && isSectionNextRow(pos)) {
+            top = mHeight - distance;
+            bottom = top + mSectionWH;
+          }
+        } else {
+          distance = child.getBottom();
+          top = 0;
+          bottom = mSectionWH;
+
+          if (distance <= mSectionWH && isSectionNextRow(pos)) {
+            top = distance - mSectionWH;
+            bottom = distance;
+          }
+        }
+      } else {
+        top = mSectionPadding;
+        bottom = mHeight - mSectionPadding;
+
+        if (mIsReverse) {
+          distance = mWidth - child.getLeft();
+          left = mWidth - mSectionWH;
+          right = mWidth;
+
+          if (distance <= mSectionWH && isSectionNextRow(pos)) {
+            left = mWidth - distance;
+            right = left + mSectionWH;
+          }
+        } else {
+          distance = child.getRight();
+          left = 0;
+          right = mSectionWH;
+
+          if (distance <= mSectionWH && isSectionNextRow(pos)) {
+            left = distance - mSectionWH;
+            right = distance;
+          }
+        }
+      }
+
+      c.drawRect(left, top, right, bottom, mSectionPaint);
+      c.drawText(getText(pos), getTextX(left, right), getTextY(top, bottom),
+          mTextPaint);
+
+      mSectionTops.put(pos, new Point(left, top));
+
+    }
 
 
   }
@@ -151,15 +245,9 @@ public class GridItemDecoration extends SuperItemDecoration {
   @Override
   public void getItemOffsets(@NonNull Rect outRect, @NonNull View view,
       @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
-    super.getItemOffsets(outRect, view, parent, state);
-
-    int pos = parent.getChildAdapterPosition(view);
 
     if (!isInit) {
-
-      mWidth = parent.getWidth();
-      mHeight = parent.getHeight();
-      mAllCount = parent.getAdapter().getItemCount();
+      super.getItemOffsets(outRect, view, parent, state);
 
       RecyclerView.LayoutManager layoutManager = parent.getLayoutManager();
       if (layoutManager instanceof GridLayoutManager) {
@@ -176,7 +264,7 @@ public class GridItemDecoration extends SuperItemDecoration {
 
       int itemOffset;
 
-      if (mOrientation == RecyclerView.VERTICAL) {
+      if (isVertical()) {
         int width = view.getLayoutParams().width;
         if (width < 0) {
           mPadding = 0;
@@ -189,7 +277,7 @@ public class GridItemDecoration extends SuperItemDecoration {
           mPadding = 0;
         }
 
-        parent.setPadding(mPadding, 0, mPadding, 0);
+        parent.setPadding(mPadding, parent.getPaddingTop(), mPadding, parent.getPaddingBottom());
 
       }else{
         int height = view.getLayoutParams().height;
@@ -204,14 +292,14 @@ public class GridItemDecoration extends SuperItemDecoration {
           mPadding = 0;
         }
 
-        parent.setPadding(0, mPadding, 0, mPadding);
+        parent.setPadding(parent.getPaddingLeft(), mPadding, parent.getPaddingRight(), mPadding);
 
       }
 
       for (int i = 1; i < ((mSpanCount / 2) + (mSpanCount % 2)); i++) {
-        int left = getLeftOffset(i);
-        int right = getRightOffset(i);
-        int preRight = getLeftOffset(i - 1);
+        int left = getLeftOffsetByRowPosition(i);
+        int right = getRightOffsetByRowPosition(i, 1);
+        int preRight = getLeftOffsetByRowPosition(i - 1);
         if (left + right != itemOffset || preRight + left != mVerDivideWidth) {
           mNeedAdd = true;
           mNeedAddRowPosition = i;
@@ -239,7 +327,7 @@ public class GridItemDecoration extends SuperItemDecoration {
     //int top = 0;
     //int bottom = mDivideWidth;
 
-
+    int pos = parent.getChildAdapterPosition(view);
 
     int left = getLeftOffset(pos);
     int right = getRightOffset(pos);
@@ -248,9 +336,10 @@ public class GridItemDecoration extends SuperItemDecoration {
 
     int top = 0, bottom = 0;
 
-    int divideWidth = mOrientation == RecyclerView.VERTICAL ? mHorDivideWidth : mVerDivideWidth;
+    int divideWidth = isVertical() ? mHorDivideWidth : mVerDivideWidth;
 
-    int offset = getSpanSizeLookup().getSpanGroupIndex(pos, mSpanCount) == 0 ? mSectionWH : isSectionRow(pos) ? mSectionWH + divideWidth : divideWidth;
+    //int offset = getSpanSizeLookup().getSpanGroupIndex(pos, mSpanCount) == 0 ? mSectionWH : isSectionRow(pos) ? mSectionWH + divideWidth : divideWidth;
+    int offset = isSectionRow(pos) ? mSectionWH : divideWidth;
     if (mShowSection){
       top = offset;
     }else{
@@ -258,10 +347,19 @@ public class GridItemDecoration extends SuperItemDecoration {
     }
 
 
-    if (mOrientation == RecyclerView.VERTICAL) {
+    if (isVertical()) {
+      if (mIsReverse){
+      outRect.set(left,bottom,right,top);
+      }else {
       outRect.set(left,top,right,bottom);
+
+      }
     }else{
-      outRect.set(top,left,bottom,right);
+      if (mIsReverse){
+        outRect.set(bottom,left,top,right);
+      }else{
+        outRect.set(top,left,bottom,right);
+      }
     }
 
   }
@@ -272,18 +370,23 @@ public class GridItemDecoration extends SuperItemDecoration {
 
   private int getLeftOffsetByRowPosition(int rowPosition){
     int n = rowPosition + 1;
-    return  (n - 1) * (mOrientation == RecyclerView.VERTICAL ? mVerDivideWidth : mHorDivideWidth) / mSpanCount;
+    return  (n - 1) * (isVertical() ? mVerDivideWidth : mHorDivideWidth) / mSpanCount;
   }
 
   private int getRightOffset(int position) {
-    return getRightOffsetByRowPosition(getSpanSizeLookup().getSpanIndex(position, mSpanCount));
+    return getRightOffsetByRowPosition(getSpanSizeLookup().getSpanIndex(position, mSpanCount), getSpanSizeLookup().getSpanSize(position));
   }
 
-  private int getRightOffsetByRowPosition(int rowPosition){
-    int n = rowPosition + 1;
-    return (mSpanCount - n) * (mOrientation == RecyclerView.VERTICAL ? mVerDivideWidth : mHorDivideWidth) / mSpanCount;
+  private int getRightOffsetByRowPosition(int rowPosition, int spanSize){
+    int n = rowPosition + spanSize;
+    return (mSpanCount - n) * (isVertical() ? mVerDivideWidth : mHorDivideWidth) / mSpanCount;
   }
 
+  /**
+   * 当前所在的行 是否该显示section
+   * @param pos
+   * @return
+   */
   private boolean isSectionRow(int pos) {
     for (int i = pos; i >= pos - mSpanCount + 1 && i >= 0; i--) {
       if (isShowSection(i)){
@@ -292,6 +395,19 @@ public class GridItemDecoration extends SuperItemDecoration {
     }
     return false;
   }
+
+  private boolean isSectionNextRow(int pos){
+    for (int i = pos + 1; i <= pos + mSpanCount && i < mAllItemCount ; i++) {
+      if (getSpanSizeLookup().getSpanIndex(i, mSpanCount) == 0){
+        if (isShowSection(i)){
+          return true;
+        }
+        break;
+      }
+    }
+    return false;
+  }
+
 
   private int getOffset(int p) {
     if (p == 0) return 0;

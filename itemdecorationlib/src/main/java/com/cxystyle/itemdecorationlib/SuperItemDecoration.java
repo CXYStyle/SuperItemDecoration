@@ -8,13 +8,20 @@ import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.View;
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import com.cxystyle.itemdecorationlib.builder.BaseBuilder;
 import com.cxystyle.itemdecorationlib.callback.OnSectionClickListener;
 import com.cxystyle.itemdecorationlib.callback.SectionGestureDetector;
 import com.cxystyle.itemdecorationlib.callback.SectionTitleCallback;
 
 public class SuperItemDecoration extends RecyclerView.ItemDecoration {
+
+  //文字基线到文字中心的距离
+  private float textDistance;
+  //文字的高度
+  private float textHeight;
 
   private SectionGestureDetector sectionGestureDetector;
 
@@ -47,6 +54,10 @@ public class SuperItemDecoration extends RecyclerView.ItemDecoration {
   protected int mOrientation;
 
   protected boolean mIsTextCenter;
+
+  protected int mAllItemCount;
+
+  protected boolean isInit = false;
 
   public SuperItemDecoration(BaseBuilder builder) {
     mSectionTops = new SparseArray();
@@ -82,6 +93,10 @@ public class SuperItemDecoration extends RecyclerView.ItemDecoration {
 
     mIsTextCenter = mSectionTextPadding < 0 ? true : false;
 
+    Paint.FontMetrics fontMetrics = mTextPaint.getFontMetrics();
+    textDistance = (fontMetrics.bottom - fontMetrics.top) / 2 - fontMetrics.bottom;
+    textHeight = fontMetrics.bottom - fontMetrics.top;
+
   }
 
   @Override public void onDraw(@NonNull Canvas c, @NonNull RecyclerView parent,
@@ -113,6 +128,9 @@ public class SuperItemDecoration extends RecyclerView.ItemDecoration {
   @Override public void getItemOffsets(@NonNull Rect outRect, @NonNull View view,
       @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
     super.getItemOffsets(outRect, view, parent, state);
+    mWidth = parent.getWidth();
+    mHeight = parent.getHeight();
+    mAllItemCount = parent.getAdapter().getItemCount();
   }
 
 
@@ -140,6 +158,32 @@ public class SuperItemDecoration extends RecyclerView.ItemDecoration {
       } else {
         return true;
       }
+    }
+  }
+
+  protected boolean isVertical(){
+    return mOrientation == RecyclerView.VERTICAL;
+  }
+  protected boolean isHorizontal(){
+    return mOrientation == RecyclerView.HORIZONTAL;
+  }
+
+  protected float getTextX(int left, int right) {
+
+    if (isHorizontal() || mIsTextCenter) {
+      mTextPaint.setTextAlign(Paint.Align.CENTER);
+      return (left + right) / 2;
+    } else {
+      mTextPaint.setTextAlign(Paint.Align.LEFT);
+      return mSectionPadding + mSectionTextPadding;
+    }
+  }
+
+  protected float getTextY(int top, int bottom) {
+    if (isVertical() || mIsTextCenter) {
+      return (bottom + top) / 2 + textDistance;
+    } else {
+      return mSectionPadding + mSectionTextPadding + textHeight;
     }
   }
 

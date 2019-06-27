@@ -48,7 +48,7 @@ public class DemoActivity extends BaseActivity {
     mBuilder = mLayoutManager == 1 ? new LinearBuilder() : new GridBuilder();
     mBuilder
         //分割线颜色
-        .setDivideColor(Color.GRAY)
+        //.setDivideColor(Color.RED)
 
 
         //以下为section设置，不需要可以不设置
@@ -56,15 +56,14 @@ public class DemoActivity extends BaseActivity {
         .setShowSection(mMode == 2)
         //section颜色
         .setSectionColor(Color.GRAY)
-        //.setSectionColor(Color.TRANSPARENT)
         //section高度(宽度)
         .setSectionWH(56)
         //section左右(上下)间距
-        .setSectionPadding(0)
+        .setSectionPadding(dp2px(0))
         //section文字颜色
         .setSectionTextColor(Color.BLACK)
         //section文字离左(上)间距， 如果值小于0，则为居中
-        .setSectionTextPadding(-1)
+        .setSectionTextPadding(dp2px(16))
         //section 文字size
         .setSectionTextSize(32)
         //section是否吸顶
@@ -89,7 +88,7 @@ public class DemoActivity extends BaseActivity {
         })
         .setOnSectionClickListener(new OnSectionClickListener() {
           @Override public void onSectionClick(int position) {
-            Toast.makeText(DemoActivity.this, String.valueOf(position), Toast.LENGTH_SHORT).show();
+            Toast.makeText(DemoActivity.this, "click section: " + position, Toast.LENGTH_SHORT).show();
           }
         });
     if (mLayoutManager == 1){
@@ -97,21 +96,25 @@ public class DemoActivity extends BaseActivity {
           //分割线高度(宽度)
           .setDivideWidth(16)
           //分割线左右(上下)间距
-          .setDividePadding(32);
+          .setDividePadding(dp2px(16));
     }else{
       ((GridBuilder) mBuilder)
           .setHorDivideWidth(20)
-          .setHorDividePadding(0)
-          .setVerDivideWidth(13)
-          .setVerDividePadding(0);
+          .setVerDivideWidth(13);
     }
 
 
     int layoutId = mLayoutManager == 1 ? R.layout.item : mOrientation == RecyclerView.VERTICAL ? R.layout.item_grid_ver : R.layout.item_grid_hor;
-    mRv.setLayoutManager(mLayoutManager == 1 ? new LinearLayoutManager(this, mOrientation, mReverse) : new GridLayoutManager(this, 5, mOrientation, mReverse));
+    mRv.setLayoutManager(mLayoutManager == 1 ? new LinearLayoutManager(this, mOrientation, mReverse) : new GridLayoutManager(this, 4, mOrientation, mReverse));
 
     mAdapter = new SimpleAdapter(layoutId, Datas.list);
     mRv.addItemDecoration(mBuilder.build());
     mRv.setAdapter(mAdapter);
   }
+
+  private int dp2px(int dp){
+    return (int) (getResources().getDisplayMetrics().density * dp + 0.5);
+  }
+
+
 }

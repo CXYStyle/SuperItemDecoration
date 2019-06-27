@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,8 +30,15 @@ public class SimpleAdapter extends RecyclerView.Adapter<SimpleAdapter.SimpleView
     return datas.size();
   }
 
-  @Override public void onBindViewHolder(@NonNull SimpleViewHolder holder, int position) {
+  @Override public void onBindViewHolder(@NonNull SimpleViewHolder holder, final int position) {
     holder.tv.setText(String.valueOf(datas.get(position)));
+
+    holder.itemView.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View v) {
+        Toast.makeText(v.getContext(), "click item: " + position, Toast.LENGTH_SHORT).show();
+      }
+    });
+
   }
 
   public class SimpleViewHolder extends RecyclerView.ViewHolder{

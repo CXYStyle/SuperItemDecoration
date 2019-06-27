@@ -19,11 +19,6 @@ import com.cxystyle.itemdecorationlib.builder.LinearBuilder;
  */
 public class LinearItemDecoration extends SuperItemDecoration {
 
-  //文字基线到文字中心的距离
-  private float textDistance;
-  //文字的高度
-  private float textHeight;
-
   //分割线宽
   protected int mDivideWidth;
   //分割线距离recyclerview 间距
@@ -32,15 +27,14 @@ public class LinearItemDecoration extends SuperItemDecoration {
   public LinearItemDecoration(BaseBuilder builder) {
     super(builder);
 
-    LinearBuilder linearBuilder = (LinearBuilder) builder;
+    initBuilder((LinearBuilder) builder);
 
+  }
+
+  private void initBuilder(LinearBuilder builder) {
+    LinearBuilder linearBuilder = builder;
     this.mDivideWidth = linearBuilder.getDivideWidth();
     this.mDividePadding = linearBuilder.getDividePadding();
-
-    Paint.FontMetrics fontMetrics = mTextPaint.getFontMetrics();
-    textDistance = (fontMetrics.bottom - fontMetrics.top) / 2 - fontMetrics.bottom;
-    textHeight = fontMetrics.bottom - fontMetrics.top;
-
   }
 
   @Override public void onDraw(@NonNull Canvas c, @NonNull RecyclerView parent,
@@ -54,6 +48,7 @@ public class LinearItemDecoration extends SuperItemDecoration {
       boolean reverseLayout = ((LinearLayoutManager) layoutManager).getReverseLayout();
 
       int childCount = parent.getChildCount();
+
       for (int i = 0; i < childCount; i++) {
         View child = parent.getChildAt(i);
         int position = parent.getChildAdapterPosition(child);
@@ -61,7 +56,7 @@ public class LinearItemDecoration extends SuperItemDecoration {
         //section
         if (mShowSection && isShowSection(position)) {
           int left, top, right, bottom;
-          if (mOrientation == LinearLayoutManager.VERTICAL) {
+          if (isVertical()) {
             //VERTICAL
             left = mSectionPadding;
             right = mWidth - mSectionPadding;
@@ -92,10 +87,16 @@ public class LinearItemDecoration extends SuperItemDecoration {
 
         }
 
+
+        //if (position < mAllItemCount - 1 && isShowSection(position + 1) || position == mAllItemCount - 1){
+        //  //下一个显示section 或者是最后一个 则不画divide
+        //  continue;
+        //}
+
         //divide
         if (mDivideWidth != 0) {
           int top, bottom, left, right;
-          if (mOrientation == LinearLayoutManager.VERTICAL) {
+          if (isVertical()) {
             left = mDividePadding;
             right = mWidth - mDividePadding;
             if (reverseLayout) {
@@ -136,7 +137,7 @@ public class LinearItemDecoration extends SuperItemDecoration {
 
       int left, top, right, bottom, distance;
 
-      if (mOrientation == LinearLayoutManager.VERTICAL) {
+      if (isVertical()) {
         left = mSectionPadding;
         right = mWidth - mSectionPadding;
 
@@ -195,22 +196,27 @@ public class LinearItemDecoration extends SuperItemDecoration {
 
   @Override public void getItemOffsets(@NonNull Rect outRect, @NonNull View view,
       @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
-    super.getItemOffsets(outRect, view, parent, state);
-    //section 为顶部偏移， divide为底部偏移
-
-    RecyclerView.LayoutManager layoutManager = parent.getLayoutManager();
-    if (layoutManager instanceof LinearLayoutManager) {
-      mIsReverse = ((LinearLayoutManager) layoutManager).getReverseLayout();
-      mOrientation = ((LinearLayoutManager) layoutManager).getOrientation();
+    if (!isInit) {
+      super.getItemOffsets(outRect, view, parent, state);
+      RecyclerView.LayoutManager layoutManager = parent.getLayoutManager();
+      if (layoutManager instanceof LinearLayoutManager) {
+        mIsReverse = ((LinearLayoutManager) layoutManager).getReverseLayout();
+        mOrientation = ((LinearLayoutManager) layoutManager).getOrientation();
+      }
+      isInit = true;
     }
+
+
     int pos = parent.getChildAdapterPosition(view);
 
     if (mShowSection) {
 
-      int offset = pos == 0 ? mSectionWH : isShowSection(pos) ? mSectionWH + mDivideWidth
-          : mDivideWidth;
+      //int offset = pos == 0 ? mSectionWH : isShowSection(pos) ? mSectionWH + mDivideWidth
+      //    : mDivideWidth;
 
-      if (mOrientation == LinearLayoutManager.VERTICAL) {
+      int offset = isShowSection(pos) ? mSectionWH : mDivideWidth;
+
+      if (isVertical()) {
         if (mIsReverse) {
           outRect.bottom = offset;
         } else {
@@ -224,7 +230,7 @@ public class LinearItemDecoration extends SuperItemDecoration {
         }
       }
     } else {
-      if (mOrientation == LinearLayoutManager.VERTICAL) {
+      if (isVertical()) {
         if (mIsReverse) {
           outRect.top = mDivideWidth;
         } else {
@@ -241,24 +247,24 @@ public class LinearItemDecoration extends SuperItemDecoration {
   }
 
 
-  private float getTextX(int left, int right) {
-
-    if (mOrientation == RecyclerView.HORIZONTAL || mIsTextCenter) {
-      mTextPaint.setTextAlign(Paint.Align.CENTER);
-      return (left + right) / 2;
-    } else {
-      mTextPaint.setTextAlign(Paint.Align.LEFT);
-      return mSectionPadding + mSectionTextPadding;
-    }
-  }
-
-  private float getTextY(int top, int bottom) {
-    if (mOrientation == RecyclerView.VERTICAL || mIsTextCenter) {
-      return (bottom + top) / 2 + textDistance;
-    } else {
-      return mSectionPadding + mSectionTextPadding + textHeight;
-    }
-  }
+  //private float getTextX(int left, int right) {
+  //
+  //  if (isHorizontal() || mIsTextCenter) {
+  //    mTextPaint.setTextAlign(Paint.Align.CENTER);
+  //    return (left + right) / 2;
+  //  } else {
+  //    mTextPaint.setTextAlign(Paint.Align.LEFT);
+  //    return mSectionPadding + mSectionTextPadding;
+  //  }
+  //}
+  //
+  //private float getTextY(int top, int bottom) {
+  //  if (isVertical() || mIsTextCenter) {
+  //    return (bottom + top) / 2 + textDistance;
+  //  } else {
+  //    return mSectionPadding + mSectionTextPadding + textHeight;
+  //  }
+  //}
 
 
 

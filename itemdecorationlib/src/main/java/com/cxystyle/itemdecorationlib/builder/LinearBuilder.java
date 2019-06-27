@@ -5,7 +5,7 @@ import com.cxystyle.itemdecorationlib.LinearItemDecoration;
 import com.cxystyle.itemdecorationlib.SuperItemDecoration;
 
 public class LinearBuilder extends BaseBuilder<LinearBuilder> {
-  private static final int DEFAULT_DIVIDE_WIDTH = 10;
+  private static final int DEFAULT_DIVIDE_WIDTH = 1;
   private static final int DEFAULT_DIVIDE_PADDING = 16;
 
   //分割线宽度
