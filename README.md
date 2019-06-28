@@ -18,27 +18,48 @@ allprojects {
 
 module的build.gradle文件中：
 dependencies {
-    implementation 'com.github.cxystyle:SuperItemDecoration:1.0.0'
+    implementation 'com.github.cxystyle:SuperItemDecoration:2.0.0'
 }
 ```
 
-## LinearLayoutManager
+## 快速使用方法
+```java
+LinearBuilder builder = new LinearBuilder();
+//GirdBuilder builder = new GirdBuilder();
+
+mRv.addItemDecoration(builder.build());
+```
+
+## 完整调用方法
+
 以下为食用方法:
 ```java
-//括号内为Horizontal的情况
-LinearItemDecoration.Builder builder = new LinearItemDecoration.Builder(this)
+
+builder
+    // LinearBuilder*********************
     //分割线高度(宽度)
-    .setDivideHeight(8)
-    //分割线颜色
-    .setDivideColor(Color.GREEN)
+    .setDivideWidth(8)
     //分割线左右(上下)间距
     .setDividePadding(16)
+    //************************************
     
+    //GridBuilder***********************
+    //水平分割线宽
+    .setHorDivideWidth(20)
+    //垂直分割线宽
+    .setVerDivideWidth(13)
+    //**********************************
+    
+    // 通用*************
+   
+    //分割线颜色， linear默认灰色， grid默认白色
+    .setDivideColor(Color.GREEN)
+
     
     //以下为section设置，不需要可以不设置
     //是否显示section，默认false
     .setShowSection(true)
-    //section颜色
+    //section颜色， 默认灰色
     .setSectionColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary))
     //section高度(宽度)
     .setSectionHeight(32)
@@ -57,12 +78,17 @@ LinearItemDecoration.Builder builder = new LinearItemDecoration.Builder(this)
       @Override public String getSectionTitle(int pos) {
         return list.get(pos).substring(0, 1);
       }
+    })
+    //section 点击监听， position为当前点击的item position
+    .setOnSectionClickListener(new OnSectionClickListener() {
+      @Override public void onSectionClick(int position) {
+        Toast.makeText(DemoActivity.this, "click section: " + position, Toast.LENGTH_SHORT).show();
+      }
     });
     
 //添加ItemDecoration
 mRv.addItemDecoration(builder.build());
 ```
 
-## GridLayoutManager
-后续添加啦
+
 
