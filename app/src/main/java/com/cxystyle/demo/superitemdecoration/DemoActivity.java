@@ -94,7 +94,7 @@ public class DemoActivity extends BaseActivity {
     if (mLayoutManager == 1){
       ((LinearBuilder) mBuilder)
           //分割线高度(宽度)
-          .setDivideWidth(16)
+          .setDivideWidth(1)
           //分割线左右(上下)间距
           .setDividePadding(dp2px(16));
     }else{
