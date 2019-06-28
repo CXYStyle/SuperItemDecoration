@@ -1,7 +1,9 @@
 # SuperItemDecoration
 对RecyclerView的ItemDecoration进行的通用型封装。 包括分割线和分类title。
 
-![demo1](https://github.com/cxystyle/SuperItemDecoration/blob/master/images/demo1.gif)
+![LinearDemo](https://github.com/cxystyle/SuperItemDecoration/blob/master/images/linear_demo.gif)
+
+![GridDemo](https://github.com/cxystyle/SuperItemDecoration/blob/master/images/grid_demo.gif)
 
 ## 引用方法
 ```gradle
