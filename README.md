@@ -18,7 +18,7 @@ allprojects {
 
 module的build.gradle文件中：
 dependencies {
-    implementation 'com.github.cxystyle:SuperItemDecoration:2.0.0'
+    implementation 'com.github.cxystyle:SuperItemDecoration:3.0.0'
 }
 ```
 
