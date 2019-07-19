@@ -155,6 +155,7 @@
   </RadioGroup>
   
   <androidx.appcompat.widget.AppCompatButton
+      android:id="@+id/btn"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:text="start"
@@ -163,7 +164,6 @@
       app:layout_constraintTop_toBottomOf="@+id/rg4"
       android:layout_marginTop="16dp"
       android:textAllCaps="false"
-      android:onClick="action"
       />
 
 

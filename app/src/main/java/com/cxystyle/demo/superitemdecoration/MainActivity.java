@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.RadioGroup;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener {
@@ -12,6 +13,8 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
   private RadioGroup mRg2;
   private RadioGroup mRg3;
   private RadioGroup mRg4;
+
+  private AppCompatButton btn;
 
   protected int mLayoutManager = 1;
   protected int mMode = 1;
@@ -31,15 +34,19 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     mRg2.setOnCheckedChangeListener(this);
     mRg3.setOnCheckedChangeListener(this);
     mRg4.setOnCheckedChangeListener(this);
-  }
 
-  public void action(View view) {
-    Intent intent = new Intent(this, DemoActivity.class);
-    intent.putExtra("layoutmanager", mLayoutManager);
-    intent.putExtra("mode", mMode);
-    intent.putExtra("orientation", mOrientation);
-    intent.putExtra("reverse", mReverse);
-    startActivity(intent);
+    btn = findViewById(R.id.btn);
+    btn.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View v) {
+        Intent intent = new Intent(MainActivity.this, DemoActivity.class);
+        intent.putExtra("layoutmanager", mLayoutManager);
+        intent.putExtra("mode", mMode);
+        intent.putExtra("orientation", mOrientation);
+        intent.putExtra("reverse", mReverse);
+        startActivity(intent);
+      }
+    });
+
   }
 
   @Override public void onCheckedChanged(RadioGroup group, int checkedId) {

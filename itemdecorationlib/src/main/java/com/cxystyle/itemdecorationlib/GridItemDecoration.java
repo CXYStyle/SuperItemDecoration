@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.cxystyle.itemdecorationlib.builder.BaseBuilder;
 import com.cxystyle.itemdecorationlib.builder.GridBuilder;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  *
@@ -32,7 +33,9 @@ public class GridItemDecoration extends SuperItemDecoration {
 
   private int mSpanCount;
 
-  private ArrayMap<Integer, Integer> offsets = new ArrayMap<>();
+  //private ArrayMap<Integer, Integer> offsets = new ArrayMap<>();
+  private HashMap<Integer, Integer> offsets = new HashMap<>();
+
   private GridLayoutManager.SpanSizeLookup mDefaultSpanSizeLookup;
 
 
